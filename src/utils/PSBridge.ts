@@ -30,7 +30,7 @@ class PSBridge {
       initialSettings: {
         AutoPlayVideo: true,
         AutoConnect: false, // 手動制御
-        ss: 'ws://14.12.7.163:7232', // ユーザー指定のシグナリングサーバー
+        ss: import.meta.env.VITE_PS_URL || 'ws://127.0.0.1:80', // 環境変数から取得、未設定時はローカルホスト
         StartVideoMuted: true,
 
         HoveringMouse: false, // マウスロックモード（FPS操作）
