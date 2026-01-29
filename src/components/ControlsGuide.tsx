@@ -20,7 +20,7 @@ const ControlsGuide = () => {
     <>
       {!showControlsGuide ? (
         <button
-          className="bg-transparent rounded-full w-10 h-10 flex items-center justify-center text-black hover:bg-white/10 transition-colors pointer-events-auto"
+          className="bg-white/20 backdrop-blur-sm border border-white/40 shadow-xl rounded-full w-10 h-10 flex items-center justify-center text-black hover:bg-white/30 transition-colors pointer-events-auto"
           onClick={() => setShowControlsGuide(true)}
           title="操作ガイドを表示"
         >
