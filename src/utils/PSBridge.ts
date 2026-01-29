@@ -2,7 +2,7 @@
  * UE5 Pixel Streamingとの通信ブリッジ
  * 参考: https://docs.unrealengine.com/5.4/en-US/pixel-streaming-in-unreal-engine/
  */
-import { PixelStreaming, Config } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.7'
+import { PixelStreaming, Config, NumericParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.7'
 
 // Web → UE5 コマンド
 export type UE5Command =
@@ -35,7 +35,13 @@ class PSBridge {
 
         HoveringMouse: false, // マウスロックモード（FPS操作）
         TouchInput: true,
-        MatchViewportRes: true // ブラウザサイズに合わせてUE5側の解像度を変更（黒帯対策）
+        MatchViewportRes: true, // ブラウザサイズに合わせてUE5側の解像度を変更（黒帯対策）
+
+        // 品質設定（デフォルト: 高画質）
+        WebRTCFPS: 60,
+        WebRTCMinBitrate: 5000000, // 5 Mbps
+        WebRTCMaxBitrate: 20000000, // 20 Mbps
+        MinQP: 10, // クオリティ優先
       }
     })
 
@@ -107,6 +113,36 @@ class PSBridge {
 
     // JSONとして送信
     this.pixelStreaming.emitUIInteraction(command)
+  }
+
+  /**
+   * 品質設定を変更
+   */
+  setQuality(level: 'low' | 'medium' | 'high'): void {
+    console.log(`[PSBridge] Setting quality to ${level}`)
+
+    // Configの数値を変更すると、PixelStreamingが自動検知してWebRTCパラメータを更新する
+    // または内部でrenegotiationが走る場合がある
+    switch (level) {
+      case 'low':
+        this.config.setNumericSetting(NumericParameters.WebRTCMinBitrate, 1000000) // 1 Mbps
+        this.config.setNumericSetting(NumericParameters.WebRTCMaxBitrate, 2000000) // 2 Mbps
+        this.config.setNumericSetting(NumericParameters.WebRTCFPS, 30)
+        this.config.setNumericSetting(NumericParameters.MinQP, 25) // 圧縮率高め
+        break
+      case 'medium':
+        this.config.setNumericSetting(NumericParameters.WebRTCMinBitrate, 3000000) // 3 Mbps
+        this.config.setNumericSetting(NumericParameters.WebRTCMaxBitrate, 10000000) // 10 Mbps
+        this.config.setNumericSetting(NumericParameters.WebRTCFPS, 60)
+        this.config.setNumericSetting(NumericParameters.MinQP, 15)
+        break
+      case 'high':
+        this.config.setNumericSetting(NumericParameters.WebRTCMinBitrate, 10000000) // 10 Mbps
+        this.config.setNumericSetting(NumericParameters.WebRTCMaxBitrate, 50000000) // 50 Mbps
+        this.config.setNumericSetting(NumericParameters.WebRTCFPS, 60)
+        this.config.setNumericSetting(NumericParameters.MinQP, 1) // 最高品質
+        break
+    }
   }
 
   /**

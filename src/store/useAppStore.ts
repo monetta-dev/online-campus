@@ -19,12 +19,16 @@ interface AppState {
   // 操作ガイドの表示状態
   showControlsGuide: boolean
   // UE5接続状態
+  // UE5接続状態
   isUE5Connected: boolean
+  // 品質設定
+  qualityPreference: 'low' | 'medium' | 'high'
 
   // アクション
   setCurrentLocation: (location: string) => void
   selectBuilding: (buildingId: string | null) => void
   setTimeOfDay: (time: TimeOfDay) => void
+  setQualityPreference: (quality: 'low' | 'medium' | 'high') => void
   toggleSidePanel: () => void
   openSidePanel: () => void
   closeSidePanel: () => void
@@ -51,12 +55,19 @@ export const useAppStore = create<AppState>((set, get) => ({
   showControlsGuide: true,
   isUE5Connected: false,
 
+  // 品質設定
+  qualityPreference: 'medium',
+
   setCurrentLocation: (location) => set({ currentLocation: location }),
   selectBuilding: (buildingId) => set({ selectedBuildingId: buildingId }),
   setTimeOfDay: (time) => {
     set({ timeOfDay: time })
     // PSBridge経由でUE5に時間設定を送信
     psSetTime(time)
+  },
+  setQualityPreference: (quality) => {
+    set({ qualityPreference: quality })
+    psBridge.setQuality(quality)
   },
   toggleSidePanel: () => set((state) => ({ isSidePanelOpen: !state.isSidePanelOpen })),
   openSidePanel: () => set({ isSidePanelOpen: true }),

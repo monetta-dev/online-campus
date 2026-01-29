@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import SettingsModal from './SettingsModal'
 
 const HamburgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const [openSettings, setOpenSettings] = useState(false)
 
   const menuItems = [
     { icon: '🗺️', label: '全体マップ' },
@@ -33,6 +35,9 @@ const HamburgerMenu = () => {
               onClick={() => {
                 console.log(`Selected: ${item.label}`)
                 setIsOpen(false)
+                if (item.label === '設定') {
+                  setOpenSettings(true)
+                }
               }}
             >
               <span className="text-xl">{item.icon}</span>
@@ -41,6 +46,8 @@ const HamburgerMenu = () => {
           ))}
         </div>
       )}
+
+      {openSettings && <SettingsModal onClose={() => setOpenSettings(false)} />}
     </div>
   )
 }
