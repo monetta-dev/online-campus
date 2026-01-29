@@ -36,12 +36,6 @@ class PSBridge {
         HoveringMouse: false, // マウスロックモード（FPS操作）
         TouchInput: true,
         MatchViewportRes: true, // ブラウザサイズに合わせてUE5側の解像度を変更（黒帯対策）
-
-        // 品質設定（デフォルト: 高画質）
-        WebRTCFPS: 60,
-        WebRTCMinBitrate: 100000, // 100 kbps (極めて低く設定し、止まるのを防ぐ)
-        WebRTCMaxBitrate: 500000000, // 500 Mbps (実質無制限)
-        MinQP: 40, // かなりブロックノイズが出ることを許容してでも動きを止めない
       }
     })
 
@@ -115,18 +109,7 @@ class PSBridge {
     this.pixelStreaming.emitUIInteraction(command)
   }
 
-  /**
-   * 品質設定を変更
-   */
-  setQuality(level: 'low' | 'medium' | 'high'): void {
-    console.log(`[PSBridge] Setting quality to ${level}`)
 
-    // Configの数値を変更すると、PixelStreamingが自動検知してWebRTCパラメータを更新する
-    // または内部でrenegotiationが走る場合がある
-    // ユーザーの要望により、手動設定を廃止し、常に「動き優先の完全自動調整」とする
-    // Low/Medium/Highの設定値は適用せず、アダプティブビットレートに任せる
-    console.log('[PSBridge] setQuality called but ignored (Auto-Adaptive Mode Active)')
-  }
 
   /**
    * UE5からのイベントリスナー登録

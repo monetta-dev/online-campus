@@ -24,7 +24,7 @@ const SettingsModal = ({ onClose }: { onClose: () => void }) => {
                 </div>
 
                 <div className="space-y-6">
-                    {/* 画質設定セクション */}
+
 
 
                     <div className="border-t border-gray-200 pt-4">
