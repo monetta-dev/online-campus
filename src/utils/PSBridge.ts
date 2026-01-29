@@ -2,7 +2,7 @@
  * UE5 Pixel Streamingとの通信ブリッジ
  * 参考: https://docs.unrealengine.com/5.4/en-US/pixel-streaming-in-unreal-engine/
  */
-import { PixelStreaming, Config, NumericParameters } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.7'
+import { PixelStreaming, Config } from '@epicgames-ps/lib-pixelstreamingfrontend-ue5.7'
 
 // Web → UE5 コマンド
 export type UE5Command =
@@ -39,9 +39,9 @@ class PSBridge {
 
         // 品質設定（デフォルト: 高画質）
         WebRTCFPS: 60,
-        WebRTCMinBitrate: 5000000, // 5 Mbps
-        WebRTCMaxBitrate: 20000000, // 20 Mbps
-        MinQP: 10, // クオリティ優先
+        WebRTCMinBitrate: 100000, // 100 kbps (極めて低く設定し、止まるのを防ぐ)
+        WebRTCMaxBitrate: 500000000, // 500 Mbps (実質無制限)
+        MinQP: 40, // かなりブロックノイズが出ることを許容してでも動きを止めない
       }
     })
 
@@ -123,26 +123,9 @@ class PSBridge {
 
     // Configの数値を変更すると、PixelStreamingが自動検知してWebRTCパラメータを更新する
     // または内部でrenegotiationが走る場合がある
-    switch (level) {
-      case 'low':
-        this.config.setNumericSetting(NumericParameters.WebRTCMinBitrate, 1000000) // 1 Mbps
-        this.config.setNumericSetting(NumericParameters.WebRTCMaxBitrate, 2000000) // 2 Mbps
-        this.config.setNumericSetting(NumericParameters.WebRTCFPS, 30)
-        this.config.setNumericSetting(NumericParameters.MinQP, 25) // 圧縮率高め
-        break
-      case 'medium':
-        this.config.setNumericSetting(NumericParameters.WebRTCMinBitrate, 3000000) // 3 Mbps
-        this.config.setNumericSetting(NumericParameters.WebRTCMaxBitrate, 10000000) // 10 Mbps
-        this.config.setNumericSetting(NumericParameters.WebRTCFPS, 60)
-        this.config.setNumericSetting(NumericParameters.MinQP, 15)
-        break
-      case 'high':
-        this.config.setNumericSetting(NumericParameters.WebRTCMinBitrate, 10000000) // 10 Mbps
-        this.config.setNumericSetting(NumericParameters.WebRTCMaxBitrate, 50000000) // 50 Mbps
-        this.config.setNumericSetting(NumericParameters.WebRTCFPS, 60)
-        this.config.setNumericSetting(NumericParameters.MinQP, 1) // 最高品質
-        break
-    }
+    // ユーザーの要望により、手動設定を廃止し、常に「動き優先の完全自動調整」とする
+    // Low/Medium/Highの設定値は適用せず、アダプティブビットレートに任せる
+    console.log('[PSBridge] setQuality called but ignored (Auto-Adaptive Mode Active)')
   }
 
   /**

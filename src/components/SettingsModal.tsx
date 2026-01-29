@@ -1,7 +1,7 @@
-import { useAppStore } from '../store/useAppStore'
+// import { useAppStore } from '../store/useAppStore'
 
 const SettingsModal = ({ onClose }: { onClose: () => void }) => {
-    const { qualityPreference, setQualityPreference, isUE5Connected } = useAppStore()
+    // const { isUE5Connected } = useAppStore()
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -25,46 +25,7 @@ const SettingsModal = ({ onClose }: { onClose: () => void }) => {
 
                 <div className="space-y-6">
                     {/* 画質設定セクション */}
-                    <div>
-                        <h3 className="text-lg font-semibold mb-3 text-gray-700 flex items-center gap-2">
-                            <span>📺</span> 画質設定
-                        </h3>
-                        <p className="text-sm text-gray-500 mb-4">
-                            ストリーミングの品質を調整します。回線速度に合わせて選択してください。
-                        </p>
 
-                        <div className="grid grid-cols-3 gap-3">
-                            {(['low', 'medium', 'high'] as const).map((q) => (
-                                <button
-                                    key={q}
-                                    onClick={() => setQualityPreference(q)}
-                                    className={`
-                    py-3 px-2 rounded-xl border-2 transition-all flex flex-col items-center gap-1
-                    ${qualityPreference === q
-                                            ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-md transform scale-105'
-                                            : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-600'
-                                        }
-                  `}
-                                >
-                                    <span className="font-bold capitalize">{q === 'low' ? '低画質' : q === 'medium' ? '標準' : '高画質'}</span>
-                                    <span className="text-xs opacity-70">
-                                        {q === 'low' ? '軽量・安定' : q === 'medium' ? 'バランス' : '最高品質'}
-                                    </span>
-                                </button>
-                            ))}
-                        </div>
-
-                        {!isUE5Connected && (
-                            <p className="mt-3 text-xs text-amber-600 bg-amber-50 p-2 rounded border border-amber-100">
-                                ⚠️ UE5に接続されていないため、設定は接続後に適用されます。
-                            </p>
-                        )}
-
-                        <div className="mt-4 p-3 bg-gray-100 rounded-lg text-xs text-gray-500 font-mono">
-                            <div>Bitrate: {qualityPreference === 'low' ? '2Mbps' : qualityPreference === 'medium' ? '10Mbps' : '50Mbps'}</div>
-                            <div>Framerate: {qualityPreference === 'low' ? '30fps' : '60fps'}</div>
-                        </div>
-                    </div>
 
                     <div className="border-t border-gray-200 pt-4">
                         <button

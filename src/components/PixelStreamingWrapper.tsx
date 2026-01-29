@@ -11,7 +11,7 @@
 
 import { useEffect, useRef } from 'react'
 import { useAppStore } from '../store/useAppStore'
-import { psBridge } from '../utils/PSBridge'
+import { psBridge, teleport } from '../utils/PSBridge'
 
 const PixelStreamingWrapper = () => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -104,6 +104,20 @@ const PixelStreamingWrapper = () => {
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
           backgroundSize: '50px 50px',
         }} />
+      </div>
+
+      {/* Debug: Teleport Test Button */}
+      <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-50 pointer-events-auto">
+        <button
+          onClick={() => {
+            console.log('Testing teleport to library')
+            teleport('library')
+          }}
+          className="bg-purple-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-purple-700 transition-colors font-bold flex items-center gap-2"
+        >
+          <span>🚀</span>
+          <span>Test Teleport: Library</span>
+        </button>
       </div>
     </div>
   )
