@@ -1,25 +1,32 @@
-# Removing Quality Settings UI Plan
+# Teleport Integration Plan
 
 ## Goal Description
-The user requested to remove the quality settings UI as the Pixel Streaming integration now uses fully automatic adaptive bitrate.
+Integrate the "Teleport" functionality into the `InfoSidePanel` so users can choose to teleport to a building after selecting it from the search bar. This replaces the temporary debug button and the automatic pathfinding behavior.
 
 ## Proposed Changes
 
 ### [Components]
-#### [MODIFY] [SettingsModal.tsx](file:///home/monetta/src/online-campus/campus-app/src/components/SettingsModal.tsx)
-- Remove the "画質設定" section including the buttons for Low/Medium/High.
-- Remove `qualityPreference` and `setQualityPreference` from `useAppStore` hook usage.
+#### [MODIFY] [PixelStreamingWrapper.tsx](file:///home/monetta/src/online-campus/campus-app/src/components/PixelStreamingWrapper.tsx)
+- Remove the temporary "Test Teleport" debug button.
+- Remove unused `teleport` import.
 
-### [Store]
-#### [MODIFY] [useAppStore.ts](file:///home/monetta/src/online-campus/campus-app/src/store/useAppStore.ts)
-- Remove `qualityPreference` state.
-- Remove `setQualityPreference` action.
+#### [MODIFY] [SmartSearchBar.tsx](file:///home/monetta/src/online-campus/campus-app/src/components/SmartSearchBar.tsx)
+- Remove `startPathfinding` call when selecting a building. Selection should only open the side panel.
+
+#### [MODIFY] [InfoSidePanel.tsx](file:///home/monetta/src/online-campus/campus-app/src/components/InfoSidePanel.tsx)
+- Import `teleport` action from `useAppStore`.
+- Add a "Teleport (瞬時に移動)" button below the existing "Navigate" button.
 
 ## Verification Plan
 
 ### Automated Tests
-- `npm run build` to ensure no type errors.
+- `npm run build` to ensure type safety.
 
 ### Manual Verification
-- Code review: Check for presence of quality settings code.
-- User verification: User will check the Settings modal to ensure the UI is gone.
+- Code review: Ensure clean removal of debug code.
+- User verification:
+    1.  Select a building from Search.
+    2.  Verify camera does NOT move automatically.
+    3.  Verify SidePanel opens.
+    4.  Click "Teleport" button.
+    5.  Verify UE5 receives Teleport command (logs).

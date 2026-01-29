@@ -3,7 +3,7 @@ import { useAppStore } from '../store/useAppStore'
 import { campusData } from '../data/campusData'
 
 const SmartSearchBar = () => {
-  const { toggleSearchBar, startPathfinding, openSidePanel, selectBuilding } = useAppStore()
+  const { toggleSearchBar, openSidePanel, selectBuilding } = useAppStore()
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -39,8 +39,7 @@ const SmartSearchBar = () => {
     selectBuilding(building.id)
     openSidePanel()
     toggleSearchBar()
-    // ダミー移動
-    startPathfinding(building.id)
+    // 自動移動はせず、InfoSidePanelでユーザーがアクションを選択する
   }
 
   return (

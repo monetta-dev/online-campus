@@ -11,7 +11,7 @@
 
 import { useEffect, useRef } from 'react'
 import { useAppStore } from '../store/useAppStore'
-import { psBridge, teleport } from '../utils/PSBridge'
+import { psBridge } from '../utils/PSBridge'
 
 const PixelStreamingWrapper = () => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -106,19 +106,7 @@ const PixelStreamingWrapper = () => {
         }} />
       </div>
 
-      {/* Debug: Teleport Test Button */}
-      <div className="absolute top-1/2 left-4 transform -translate-y-1/2 z-50 pointer-events-auto">
-        <button
-          onClick={() => {
-            console.log('Testing teleport to library')
-            teleport('library')
-          }}
-          className="bg-purple-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-purple-700 transition-colors font-bold flex items-center gap-2"
-        >
-          <span>🚀</span>
-          <span>Test Teleport: Library</span>
-        </button>
-      </div>
+
     </div>
   )
 }

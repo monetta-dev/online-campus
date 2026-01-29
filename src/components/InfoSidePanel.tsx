@@ -2,7 +2,7 @@ import { useAppStore } from '../store/useAppStore'
 import { buildingsById, defaultBuilding } from '../data/campusData'
 
 const InfoSidePanel = () => {
-  const { selectedBuildingId, closeSidePanel } = useAppStore()
+  const { selectedBuildingId, closeSidePanel, teleport } = useAppStore()
   const data = selectedBuildingId && buildingsById[selectedBuildingId]
     ? buildingsById[selectedBuildingId]
     : defaultBuilding
@@ -92,8 +92,22 @@ const InfoSidePanel = () => {
               closeSidePanel()
             }}
           >
-            この建物へ案内
+            この建物へ案内 (徒歩)
           </button>
+          <button
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg py-3 font-medium transition-colors pointer-events-auto flex items-center justify-center gap-2 shadow-lg"
+            onClick={() => {
+              console.log(`Teleport to ${selectedBuildingId}`)
+              if (selectedBuildingId) {
+                teleport(selectedBuildingId)
+                closeSidePanel()
+              }
+            }}
+          >
+            <span>🚀</span>
+            <span>テレポート (瞬時に移動)</span>
+          </button>
+
           <button
             className="w-full bg-transparent hover:bg-transparent text-black border border-black/10 hover:border-black/30 rounded-lg py-3 font-medium transition-colors pointer-events-auto"
             onClick={() => {
@@ -105,7 +119,9 @@ const InfoSidePanel = () => {
           </button>
         </div>
       </div>
+
     </div>
+
   )
 }
 
